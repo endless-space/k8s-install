@@ -31,6 +31,14 @@ systemctl restart docker <br />
 >1.4 ntp 时间同步
 ntpdate -u cn.pool.ntp.org <br />
 
+>1.5 配置内核参数 <br />
+cat <<EOF > /etc/sysctl.d/k8s.conf<br />
+net.ipv4.ip_forward = 1<br />
+net.bridge.bridge-nf-call-ip6tables = 1<br />
+net.bridge.bridge-nf-call-iptables = 1<br />
+EOF<br /><br />
+sysctl -p /etc/sysctl.d/k8s.conf
+
 
 ### 2. 部署etcd
 
