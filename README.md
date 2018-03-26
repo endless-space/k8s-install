@@ -53,8 +53,8 @@ mkdir /etc/etcd/ <br />
 cat &lt;&lt;EOF > /etc/etcd/etcd.conf <br />
 ETCD_NAME=default <br />
 ETCD_DATA_DIR="/var/lib/etcd/default.etcd" <br />
-ETCD_LISTEN_CLIENT_URLS="http://localhost:2379" <br />
-ETCD_ADVERTISE_CLIENT_URLS="http://localhost:2379" <br />
+ETCD_LISTEN_CLIENT_URLS="http://127.0.0.1:2379,http://192.168.100.100:2379" <br />
+ETCD_ADVERTISE_CLIENT_URLS="http://192.168.100.100:2379" <br />
 EOF
 
 >2.3服务配置 <br />
