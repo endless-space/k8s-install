@@ -79,6 +79,33 @@ ETCDCTL_API=3 <br />
 etcdctl put foo bar
 
 ### 3. 部署fannal网络方案
+>3.1 下载合适的发行包, 解压, 将flanneld复制到/usr/bin
+
+>3.2 应用网段配置 <br />
+etcdctl --endpoints "http://192.168.100.100:2379" \ <br />
+set /coreos.com/network/config '{"NetWork":"10.0.0.0/16", "SubnetMin": "10.0.1.0", "SubnetMax": "10.0.20.0"}' <br />
+
+>3.3 服务配置 <br />
+cat &lt;&lt;EOF > /usr/lib/systemd/system/flanneld.service <br />
+[Unit] <br />
+Description=Flanneld <br />
+After=network.target <br />
+Before=docker.service <br /> <br />
+[Service] <br />
+User=root <br />
+ExecStart=/usr/bin/flanneld \ <br />
+--etcd-endpoints=http://192.168.100.100:2379 \ <br />
+--iface=192.168.100.10x \ <br />
+--ip-masq <br />
+Restart=on-failure <br />
+Type=notify <br />
+LimitNOFILE=65536 <br />
+[Install] <br /> <br />
+WantedBy=multi-user.target <br />
+EOF <br /> <br />
+systemctl daemon-reload <br />
+systemctl start flanneld <br /> <br />
+flanneld 在启动的时候坑最多， flanneld需要export etcdctl的API version 为2， endpoints前后不需要""
 
 ### 4. 部署master节点
 
